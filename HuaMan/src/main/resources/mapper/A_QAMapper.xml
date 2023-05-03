@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace用于指定当前的映射文件和哪个接口进行映射,需要指定接口的文件路径,路径需要是包的完整路径结构-->
+<mapper namespace="com.yhy.huaman.mapper.A_QAMapper">
+
+    <resultMap id="A_QAEntityMap" type="com.yhy.huaman.entity.A_QA">
+        <id column="qa_id" property="qa_id"></id>
+    </resultMap>
+    <!--id属性:表示映射的接口中方法的名称,直接标签的内容部来编写SQL语句-->
+    <!--useGeneratedKeys="true"表示开启某个字段的值递增(大部分都是主键递增)
+        keyProperty="uid"表示将表中哪个字段进行递增
+        -->
+    <insert id="setQA" useGeneratedKeys="true" keyProperty="qa_id">
+        insert into qatable(
+            user_id,student_id,teacher_id,kechengclass_id,kechengclass_name,user_name,user_avartar,user_class,qa_content,
+                            qa_images,qa_is_top,qa_upper_id,qa_zan,qa_teacher_score,qa_other_score,
+                            is_delete,created_user,created_time,modified_user,modified_time
+
+        ) values (
+                  #{user_id},#{student_id},#{teacher_id},#{kechengclass_id},#{kechengclass_name},#{user_name},
+                  #{user_avartar},#{user_class},#{qa_content},#{qa_images},#{qa_is_top},#{qa_upper_id},#{qa_zan},
+                  #{qa_teacher_score},#{qa_other_score},
+                  #{is_delete},#{created_user},#{created_time},#{modified_user},#{modified_time}
+                 )
+    </insert>
+
+    <select id="findByQa_id" resultMap="A_QAEntityMap">
+        select * from qatable where qa_id=#{qa_id}
+    </select>
+    <select id="findByUser_idForTop" resultMap="A_QAEntityMap">
+        select * from qatable where user_id=#{user_id} and qa_is_top=1
+    </select>
+    <select id="findByQA_idForChild" resultMap="A_QAEntityMap">
+        select * from qatable where qa_upper_id=#{qa_id}
+    </select>
+    <select id="findByKechengclass_idForTop" resultMap="A_QAEntityMap">
+        select * from qatable where kechengclass_id=#{kechengclass_id} and qa_is_top=1 and is_delete=0
+    </select>
+    <update id="updateIsDeleteTo1">
+        update qatable set is_delete=1
+        where qa_id=#{qa_id}
+    </update>
+    <update id="givescore">
+        update qatable set qa_teacher_score=#{score}
+        where qa_id=#{qa_id}
+    </update>
+
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace用于指定当前的映射文件和哪个接口进行映射,需要指定接口的文件路径,路径需要是包的完整路径结构-->
+<mapper namespace="com.yhy.huaman.mapper.A_UserMapper">
+
+    <resultMap id="A_UserEntityMap" type="com.yhy.huaman.entity.A_User">
+        <id column="user_id" property="user_id"></id>
+    </resultMap>
+    <resultMap id="A_StudentEntityMap" type="com.yhy.huaman.entity.A_Student">
+        <id column="student_id" property="student_id"></id>
+    </resultMap>
+    <resultMap id="A_TeacherEntityMap" type="com.yhy.huaman.entity.A_Teacher">
+        <id column="teacher_id" property="teacher_id"></id>
+    </resultMap>
+    <!--id属性:表示映射的接口中方法的名称,直接标签的内容部来编写SQL语句-->
+    <!--useGeneratedKeys="true"表示开启某个字段的值递增(大部分都是主键递增)
+        keyProperty="uid"表示将表中哪个字段进行递增
+        -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="user_id">
+        insert into usertable(
+                              user_account,user_salt,user_password,user_name,user_avartar,user_type,user_gender,
+                              is_delete,created_user,created_time,modified_user,modified_time
+
+        ) values (
+                     #{user_account},#{user_salt},#{user_password},#{user_name},#{user_avartar},#{user_type},
+                  #{user_gender},#{is_delete},#{created_user},#{created_time},#{modified_user},#{modified_time}
+                 )
+    </insert>
+
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="student_id">
+        insert into studenttable(
+            user_id,user_name,student_xuehao,student_banji,student_xi,student_yuan,student_zhuanye,
+                              is_delete,created_user,created_time,modified_user,modified_time
+        ) values (
+                     #{user_id},#{user_name},#{student_xuehao},#{student_banji},#{student_xi},#{student_yuan},#{student_zhuanye},
+                     #{is_delete},#{created_user},#{created_time},#{modified_user},#{modified_time}
+                 )
+    </insert>
+
+    <insert id="insertTeacher" useGeneratedKeys="true" keyProperty="teacher_id">
+        insert into teachertable(
+            user_id,user_name,teacher_gonghao,teacher_zhicheng,
+            is_delete,created_user,created_time,modified_user,modified_time
+        ) values (
+                     #{user_id},#{user_name},#{teacher_gonghao},#{teacher_zhicheng},
+                     #{is_delete},#{created_user},#{created_time},#{modified_user},#{modified_time}
+                 )
+    </insert>
+
+    <select id="findByUser_account" resultMap="A_UserEntityMap">
+        select * from usertable where user_account=#{user_account}
+    </select>
+
+
+    <select id="findByUid" resultMap="A_UserEntityMap">
+        select * from usertable where user_id=#{user_id}
+    </select>
+
+    <select id="findStudentByUid" resultMap="A_StudentEntityMap">
+        select * from studenttable where user_id=#{user_id}
+    </select>
+    <select id="findTeacherByUid" resultMap="A_TeacherEntityMap">
+        select * from teachertable where user_id=#{user_id}
+    </select>
+    <select id="findTeacherByTeacher_id" resultMap="A_TeacherEntityMap">
+        select * from teachertable where teacher_id=#{teacher_id}
+    </select>
+
+
+</mapper>
