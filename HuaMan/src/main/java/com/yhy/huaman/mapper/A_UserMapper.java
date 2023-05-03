@@ -58,6 +58,19 @@ public interface A_UserMapper {
      * @return 受影响的行数(增删改都将受影响的行数作为返回值,可以根据返回值来判断是否执行成功)
      */
     Integer insertStudent(A_Student aStudent);
+    /**
+     * 更新学生的数据
+     * @param aStudent 学生的数据
+     * @return 受影响的行数(增删改都将受影响的行数作为返回值,可以根据返回值来判断是否执行成功)
+     */
+    Integer updateStudent(A_Student aStudent);
+
+    /**
+     * 根据user_id删除学生，便于修改信息
+     * @param user_id
+     * @return
+     */
+    Integer DelStudent(Integer user_id);
 
     /**
      * 插入老师的数据
@@ -65,6 +78,13 @@ public interface A_UserMapper {
      * @return 受影响的行数(增删改都将受影响的行数作为返回值,可以根据返回值来判断是否执行成功)
      */
     Integer insertTeacher(A_Teacher aTeacher);
+
+    /**
+     * 根据user_id删除老师，便于修改信息
+     * @param user_id
+     * @return
+     */
+    Integer DelTeacher(Integer user_id);
 
 
 

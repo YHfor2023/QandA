@@ -97,16 +97,32 @@ public class A_UserServiceImpl implements A_UserService {
     @Override
     public void setStudentInfo(A_Student aStudent,Integer user_id){
         A_User aUser =aUserMapper.findByUid(user_id);
-        aStudent.setUser_name(aUser.getUser_name());
-        //补全数据:is_delete设置为0
-        aStudent.setIs_delete(0);
-        //补全数据：四个日志字段信息
-        aStudent.setCreated_user(aUser.getUser_name());
-        aStudent.setModified_user(aUser.getUser_name());
-        Date date =new Date();
-        aStudent.setCreated_time(date);
-        aStudent.setModified_time(date);
-        aUserMapper.insertStudent(aStudent);
+        A_Student aStudent1=aUserMapper.findStudentByUid(user_id);
+        if(aStudent1!=null){
+            aUserMapper.DelStudent(user_id);
+            aStudent.setUser_name(aUser.getUser_name());
+            aStudent.setStudent_id(aStudent1.getStudent_id());
+            //补全数据:is_delete设置为0
+            aStudent.setIs_delete(0);
+            //补全数据：四个日志字段信息
+            aStudent.setCreated_user(aUser.getUser_name());
+            aStudent.setModified_user(aUser.getUser_name());
+            Date date =new Date();
+            aStudent.setCreated_time(date);
+            aStudent.setModified_time(date);
+            aUserMapper.updateStudent(aStudent);
+        }else {
+            aStudent.setUser_name(aUser.getUser_name());
+            //补全数据:is_delete设置为0
+            aStudent.setIs_delete(0);
+            //补全数据：四个日志字段信息
+            aStudent.setCreated_user(aUser.getUser_name());
+            aStudent.setModified_user(aUser.getUser_name());
+            Date date =new Date();
+            aStudent.setCreated_time(date);
+            aStudent.setModified_time(date);
+            aUserMapper.insertStudent(aStudent);
+        }
     }
 
     @Override
@@ -129,6 +145,9 @@ public class A_UserServiceImpl implements A_UserService {
     @Override
     public void setTeacherInfo(A_Teacher aTeacher, Integer user_id){
         A_User aUser =aUserMapper.findByUid(user_id);
+        if(aUserMapper.findTeacherByUid(user_id)!=null){
+            aUserMapper.DelTeacher(user_id);
+        }
         aTeacher.setUser_name(aUser.getUser_name());
         //补全数据:is_delete设置为0
         aTeacher.setIs_delete(0);

@@ -38,6 +38,15 @@
                      #{is_delete},#{created_user},#{created_time},#{modified_user},#{modified_time}
                  )
     </insert>
+    <insert id="updateStudent">
+        insert into studenttable(
+           student_id, user_id,user_name,student_xuehao,student_banji,student_xi,student_yuan,student_zhuanye,
+            is_delete,created_user,created_time,modified_user,modified_time
+        ) values (
+                    #{student_id},#{user_id},#{user_name},#{student_xuehao},#{student_banji},#{student_xi},#{student_yuan},#{student_zhuanye},
+                     #{is_delete},#{created_user},#{created_time},#{modified_user},#{modified_time}
+                 )
+    </insert>
 
     <insert id="insertTeacher" useGeneratedKeys="true" keyProperty="teacher_id">
         insert into teachertable(
@@ -67,6 +76,12 @@
     <select id="findTeacherByTeacher_id" resultMap="A_TeacherEntityMap">
         select * from teachertable where teacher_id=#{teacher_id}
     </select>
+    <delete id="DelStudent" >
+        delete from studenttable where user_id=#{user_id}
+    </delete>
+    <delete id="DelTeacher" >
+        delete from teachertable where user_id=#{user_id}
+    </delete>
 
 
 </mapper>

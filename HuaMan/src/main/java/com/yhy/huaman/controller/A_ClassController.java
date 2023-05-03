@@ -89,7 +89,16 @@ public class A_ClassController extends BaseController{
         aStudentKechengclassService.setA_Student_kechengclassInfo(user_id,kechengclass_id);
         return new JsonResult(OK,"信息录入成功");
     }
-
+    /**
+     * 根据当前课程班级的kechengclass_id查询它的top问答
+     * @param kechengclass_id
+     * @return
+     */
+    @RequestMapping("findkechengclass")
+    public JsonResult<A_Kechengclass> findkechengclass(Integer kechengclass_id){
+        A_Kechengclass aKechengclass = aKechengclassService.find(kechengclass_id);
+        return new JsonResult<A_Kechengclass>(OK,aKechengclass);
+    }
     /**
      * 根据用户id查找所加入的课程班级
      * @param user_id 用户id
@@ -416,7 +425,6 @@ public class A_ClassController extends BaseController{
 
         aQa.setQa_is_top(1);
         aQa.setQa_upper_id(0);
-        aQa.setQa_zan(0);
         aQa.setQa_teacher_score(0);
         aQa.setQa_other_score(0);
         aQaService.setQA(aQa);
