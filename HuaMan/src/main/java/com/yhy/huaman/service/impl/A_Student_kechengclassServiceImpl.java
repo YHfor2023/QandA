@@ -59,4 +59,8 @@ public class A_Student_kechengclassServiceImpl implements A_Student_kechengclass
         List<A_Student_kechengclass> result = aStudentKechengclassMapper.findbyKechengclass_id(kechengclass_id);
         return  result;
     }
+    @Override
+    public Integer updateIsDeleteTo1(Integer student_kechengclass_id) {
+        return aStudentKechengclassMapper.updateIsDeleteTo1(student_kechengclass_id);
+    }
 }

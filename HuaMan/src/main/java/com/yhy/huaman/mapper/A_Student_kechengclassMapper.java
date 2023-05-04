@@ -36,5 +36,9 @@ public interface A_Student_kechengclassMapper {
      */
     List<A_Student_kechengclass> findbyKechengclass_id(Integer kechengclass_id);
 
-
+    /**
+     * 清除学生入班信息
+     * @return
+     */
+    Integer updateIsDeleteTo1(Integer student_kechengclass_id);
 }

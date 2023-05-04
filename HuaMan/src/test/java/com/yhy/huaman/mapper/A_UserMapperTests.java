@@ -3,7 +3,6 @@ package com.yhy.huaman.mapper;
 import com.yhy.huaman.entity.A_Student;
 import com.yhy.huaman.entity.A_Teacher;
 import com.yhy.huaman.entity.A_User;
-import com.yhy.huaman.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +69,7 @@ public class A_UserMapperTests {
         aTeacher.setTeacher_gonghao("1001");
         a_userMapper.insertTeacher(aTeacher);
     }
+
 
 
 

@@ -6,6 +6,7 @@ import com.yhy.huaman.entity.A_User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface A_UserMapper {
 
@@ -50,7 +51,15 @@ public interface A_UserMapper {
      * @return 如果找到则返回对象,反之返回null值
      */
     A_Teacher findTeacherByTeacher_id(Integer teacher_id);
+    A_Student findStudentByStudent_id(Integer student_id);
 
+    /**
+     * 批量化 依据班级号寻找学生
+     * @param student_banji
+     * @return
+     */
+    List<A_Student> findStudentBystudent_banji(String student_banji);
+    List<String> findBanji();
 
     /**
      * 插入学生的数据

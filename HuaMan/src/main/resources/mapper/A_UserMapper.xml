@@ -73,8 +73,17 @@
     <select id="findTeacherByUid" resultMap="A_TeacherEntityMap">
         select * from teachertable where user_id=#{user_id}
     </select>
+    <select id="findStudentByStudent_id" resultMap="A_StudentEntityMap">
+        select * from studenttable where student_id=#{student_id} and is_delete=0
+    </select>
     <select id="findTeacherByTeacher_id" resultMap="A_TeacherEntityMap">
         select * from teachertable where teacher_id=#{teacher_id}
+    </select>
+    <select id="findStudentBystudent_banji" resultMap="A_StudentEntityMap">
+        select * from studenttable where student_banji=#{student_banji} and is_delete=0
+    </select>
+    <select id="findBanji">
+        select student_banji from studenttable
     </select>
     <delete id="DelStudent" >
         delete from studenttable where user_id=#{user_id}
@@ -82,6 +91,5 @@
     <delete id="DelTeacher" >
         delete from teachertable where user_id=#{user_id}
     </delete>
-
 
 </mapper>

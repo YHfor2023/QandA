@@ -30,9 +30,13 @@ public class A_ClassTests {
     @Autowired
     private A_UserService aUserService;
     @Autowired
+    private A_UserMapper aUserMapper;
+    @Autowired
     private A_KechengService aKechengService;
     @Autowired
     private  A_KechengclassService aKechengclassService;
+    @Autowired
+    private  A_Student_kechengclassService aStudentKechengclassService;
 
     @Autowired
     private A_QAService aQaService;
@@ -143,6 +147,45 @@ public class A_ClassTests {
         System.err.println(aKechengclassVOS);
 
     }
+    @Test
+    public void findstudentsbykechengclass_id(){
+        Integer kechengclass_id = 7;
+        List<A_Student_kechengclass> aStudentKechengclasses = aStudentKechengclassService.findbyKechengclass_id(kechengclass_id);
+        List<A_StudentVO> aStudentVOList =new ArrayList<>();
+        for (A_Student_kechengclass a :aStudentKechengclasses){
+            A_StudentVO aStudentVO =new A_StudentVO();
+            aStudentVO.setStudent_kechengclass_id(a.getStudent_kechengclass_id());
+            aStudentVO.setStudent_kechengclass_fenshu(a.getStudent_kechengclass_fenshu());
+            A_Student aStudent = aUserService.findStudentByStudent_id(a.getStudent_id());
+            aStudentVO.setStudent_id(aStudent.getStudent_id());
+            aStudentVO.setUser_id(aStudent.getUser_id());
+            aStudentVO.setUser_name(aStudent.getUser_name());
+            aStudentVO.setStudent_xuehao(aStudent.getStudent_xuehao());
+            aStudentVO.setStudent_banji(aStudent.getStudent_banji());
+            aStudentVO.setStudent_xi(aStudent.getStudent_xi());
+            aStudentVO.setStudent_yuan(aStudent.getStudent_yuan());
+            aStudentVO.setStudent_zhuanye(aStudent.getStudent_zhuanye());
+
+            aStudentVOList.add(aStudentVO);
+        }
+        System.err.println(aStudentVOList);
+    }
+    @Test
+    public void deleteStudent(){
+        Integer Student_kechengclass_id = 13;
+        aStudentKechengclassService.updateIsDeleteTo1(Student_kechengclass_id);
+    }
+    @Test
+    public void insertStudentBystudent_banji(){
+        Integer kechengclass_id = 7;
+        List<A_Student> aStudentList = aUserMapper.findStudentBystudent_banji("1921");
+        for (A_Student aStudent :aStudentList){
+//            System.err.println(aStudent.getUser_id());
+            aStudentKechengclassService.setA_Student_kechengclassInfo(aStudent.getUser_id(),kechengclass_id);
+        }
+    }
+
+
     private  List<A_KechengVO> kechengAllqa_imp(){
         List<A_Kecheng> aKechengs =aKechengService.findallkecheng();
         List<A_KechengVO> aKechengVOS = new ArrayList<>();

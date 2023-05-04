@@ -104,6 +104,53 @@ public class A_ClassController extends BaseController{
     }
 
     /**
+     * 根据课程班级id寻找加入的学生vo信息
+     * @param kechengclass_id
+     * @return
+     */
+    @RequestMapping("findstudents")
+    public JsonResult<List<A_StudentVO>> findstudents(Integer kechengclass_id){
+        List<A_Student_kechengclass> aStudentKechengclasses = aStudentKechengclassService.findbyKechengclass_id(kechengclass_id);
+        List<A_StudentVO> aStudentVOList =new ArrayList<>();
+        for (A_Student_kechengclass a :aStudentKechengclasses){
+            A_StudentVO aStudentVO =new A_StudentVO();
+            aStudentVO.setStudent_kechengclass_id(a.getStudent_kechengclass_id());
+            aStudentVO.setStudent_kechengclass_fenshu(a.getStudent_kechengclass_fenshu());
+            A_Student aStudent = aUserService.findStudentByStudent_id(a.getStudent_id());
+            aStudentVO.setStudent_id(aStudent.getStudent_id());
+            aStudentVO.setUser_id(aStudent.getUser_id());
+            aStudentVO.setUser_name(aStudent.getUser_name());
+            aStudentVO.setStudent_xuehao(aStudent.getStudent_xuehao());
+            aStudentVO.setStudent_banji(aStudent.getStudent_banji());
+            aStudentVO.setStudent_xi(aStudent.getStudent_xi());
+            aStudentVO.setStudent_yuan(aStudent.getStudent_yuan());
+            aStudentVO.setStudent_zhuanye(aStudent.getStudent_zhuanye());
+
+            aStudentVOList.add(aStudentVO);
+        }
+        return new JsonResult<List<A_StudentVO>>(OK,aStudentVOList);
+    }
+
+    /**
+     * 删除学生入班信息
+     * @param student_kechengclass_id
+     * @return
+     */
+    @RequestMapping("deleteStudent")
+    public JsonResult<Void> deleteStudent(Integer student_kechengclass_id){
+        aStudentKechengclassService.updateIsDeleteTo1(student_kechengclass_id);
+        return new JsonResult(OK,"删除成功");
+    }
+
+    @RequestMapping("insertStudentBystudent_banji")
+    public JsonResult<Void> insertStudentBystudent_banji(String student_banji,Integer kechengclass_id){
+        List<A_Student> aStudentList = aUserService.findStudentBystudent_banji(student_banji);
+        for (A_Student aStudent :aStudentList){
+            aStudentKechengclassService.setA_Student_kechengclassInfo(aStudent.getUser_id(),kechengclass_id);
+        }
+        return new JsonResult(OK,"成功");
+    }
+    /**
      * 学生加入课程班级
      * @param user_id 用户id
      * @param kechengclass_id 课程班级id

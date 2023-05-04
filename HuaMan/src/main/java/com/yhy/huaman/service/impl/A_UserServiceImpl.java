@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -141,6 +142,14 @@ public class A_UserServiceImpl implements A_UserService {
         }
         return result;
     }
+    @Override
+    public A_Student findStudentByStudent_id(Integer student_id){
+        A_Student result = aUserMapper.findStudentByStudent_id(student_id);
+        if (result == null) {
+            throw new UsernameNotFoundException("用户数据不存在");
+        }
+        return result;
+    }
 
     @Override
     public void setTeacherInfo(A_Teacher aTeacher, Integer user_id){
@@ -168,7 +177,19 @@ public class A_UserServiceImpl implements A_UserService {
         }
         return result;
     }
-
+    /**
+     * 批量化 依据班级号寻找学生
+     * @param student_banji
+     * @return
+     */
+    @Override
+    public List<A_Student> findStudentBystudent_banji(String student_banji) {
+        return aUserMapper.findStudentBystudent_banji(student_banji);
+    }
+    @Override
+    public List<String> findBanji(){
+        return aUserMapper.findBanji();
+    }
     @Override
     public A_User find(Integer user_id){
         A_User result = aUserMapper.findByUid(user_id);

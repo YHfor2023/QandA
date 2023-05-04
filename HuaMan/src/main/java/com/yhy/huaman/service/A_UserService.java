@@ -4,6 +4,8 @@ import com.yhy.huaman.entity.A_Student;
 import com.yhy.huaman.entity.A_Teacher;
 import com.yhy.huaman.entity.A_User;
 
+import java.util.List;
+
 /**用户模块业务层接口*/
 public interface A_UserService {
     /**
@@ -45,8 +47,14 @@ public interface A_UserService {
      */
     A_Teacher findTeacherByUid(Integer user_id);
     A_Teacher findTeacherByTeacher_id(Integer teacher_id);
-
-
+    A_Student findStudentByStudent_id(Integer student_id);
+    /**
+     * 批量化 依据班级号寻找学生
+     * @param student_banji
+     * @return
+     */
+    List<A_Student> findStudentBystudent_banji(String student_banji);
+    List<String> findBanji();
     A_User find(Integer user_id);
     /**
      * changePassword方法需要什么参数:
