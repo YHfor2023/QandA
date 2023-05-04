@@ -1,6 +1,6 @@
 package com.yhy.huaman.entity;
 
-public class A_keywords extends BaseEntity{
+public class A_Keywords extends BaseEntity{
 
 
     private Integer keywords_id;

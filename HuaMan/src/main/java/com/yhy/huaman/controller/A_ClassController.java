@@ -31,6 +31,8 @@ public class A_ClassController extends BaseController{
     private A_QA_impService aQa_impService;
     @Autowired
     private A_CollectService aCollectService;
+    @Autowired
+    private A_KeywordsService aKeywordsService;
 
     /**
      * 查询课程信息
@@ -75,6 +77,29 @@ public class A_ClassController extends BaseController{
     @RequestMapping("setKechengclassInfo")
     public JsonResult<Void> setKechengclassInfo(A_Kechengclass aKechengclass, Integer teacher_id, Integer kecheng_id){
         aKechengclassService.setKechengclassInfo(aKechengclass,teacher_id,kecheng_id);
+        return new JsonResult(OK,"信息录入成功");
+    }
+
+    /**
+     * 搜索当前课程班级的关键词
+     * @param kechengclass_id
+     * @return
+     */
+    @RequestMapping("findkeywords")
+    public JsonResult<List<A_Keywords>> findkeywords(Integer kechengclass_id){
+        List<A_Keywords> keywordsList = aKeywordsService.findbykechengclass_id(kechengclass_id);
+        return new JsonResult<List<A_Keywords>>(OK,keywordsList);
+    }
+
+    /**
+     * 录入关键词
+     * @param aKeyword
+     * @param user_id
+     * @return
+     */
+    @RequestMapping("setkeyword")
+    public JsonResult<Void> setkeyword(A_Keywords aKeyword, Integer user_id){
+        aKeywordsService.insert(aKeyword,user_id);
         return new JsonResult(OK,"信息录入成功");
     }
 

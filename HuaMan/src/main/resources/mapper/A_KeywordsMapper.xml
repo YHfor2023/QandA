@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace用于指定当前的映射文件和哪个接口进行映射,需要指定接口的文件路径,路径需要是包的完整路径结构-->
+<mapper namespace="com.yhy.huaman.mapper.A_KeywordsMapper">
+
+    <resultMap id="A_KeywordsEntityMap" type="com.yhy.huaman.entity.A_Keywords">
+        <id column="keywords_id" property="keywords_id"></id>
+    </resultMap>
+    <!--id属性:表示映射的接口中方法的名称,直接标签的内容部来编写SQL语句-->
+    <!--useGeneratedKeys="true"表示开启某个字段的值递增(大部分都是主键递增)
+        keyProperty="uid"表示将表中哪个字段进行递增
+        -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="keywords_id">
+        insert into keywordstable(
+            keywords_id,kechengclass_id,keywords_name,keywords_parentid,
+                              is_delete,created_user,created_time,modified_user,modified_time
+
+        ) values (
+                     #{keywords_id},#{kechengclass_id},#{keywords_name},#{keywords_parentid},
+                  #{is_delete},#{created_user},#{created_time},#{modified_user},#{modified_time}
+                 )
+    </insert>
+
+    <select id="findbykechengclass_id" resultMap="A_KeywordsEntityMap">
+        select * from keywordstable where kechengclass_id=#{kechengclass_id} and is_delete=0
+    </select>
+
+</mapper>
