@@ -2,6 +2,7 @@ package com.yhy.huaman.service;
 
 import com.yhy.huaman.entity.A_Kecheng;
 import com.yhy.huaman.entity.A_QA;
+import com.yhy.huaman.vo.A_StudentscoreVO;
 
 import java.util.List;
 
@@ -79,4 +80,6 @@ public interface A_QAService {
      */
     Integer give0(Integer qa_id);
 
+    List<A_StudentscoreVO> kechengClassScore(Integer kechengclass_id);
+    List<A_StudentscoreVO> studentScore(Integer student_id,Integer kechengclass_id);
 }

@@ -42,5 +42,5 @@ public interface A_CollectMapper {
      */
     Integer updateIsDeleteTo1(Integer collect_id);
 
-
+    List<A_Collect> findbyQA_id(Integer qa_id);
 }

@@ -34,7 +34,9 @@
     <select id="findbyKechengclass_id" resultMap="A_Student_kechengclassEntityMap">
         select * from student_kechengclasstable where kechengclass_id=#{kechengclass_id} and is_delete=0
     </select>
-
+    <select id="findbyKechengclass_idandStudent_id" resultMap="A_Student_kechengclassEntityMap">
+        select * from student_kechengclasstable where kechengclass_id=#{kechengclass_id} and student_id=#{student_id} and is_delete=0
+    </select>
     <delete id="updateIsDeleteTo1">
         delete from student_kechengclasstable
         where student_kechengclass_id=#{student_kechengclass_id}

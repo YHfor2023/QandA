@@ -630,6 +630,27 @@ public class A_ClassController extends BaseController{
         return new JsonResult(OK,aKechengs);
     }
 
+    /**
+     * 评分系统-依据课程班级id 查看所有学生的分数情况
+     * @param kechengclass_id
+     * @return
+     */
+    @RequestMapping("kechengClassScore")
+    public JsonResult<List<A_StudentscoreVO>> kechengClassScore(Integer kechengclass_id){
+        List<A_StudentscoreVO> aStudentscoreVOList = aQaService.kechengClassScore(kechengclass_id);
+        return new JsonResult<List<A_StudentscoreVO>>(OK,aStudentscoreVOList);
+    }
+    /**
+     * 评分系统-依据用户id 查看学生的所有课程分数情况
+     * @param user_id
+     * @return
+     */
+    @RequestMapping("studentScore")
+    public JsonResult<List<A_StudentscoreVO>> studentScore(Integer user_id,Integer kechengclass_id){
+        List<A_StudentscoreVO> aStudentscoreVOList = aQaService.studentScore(user_id,kechengclass_id);
+        return new JsonResult<List<A_StudentscoreVO>>(OK,aStudentscoreVOList);
+    }
+
     private List<A_QAvo> findImpQAsVOByKehenglass_id(Integer kechengclass_id){
         List<A_QAvo> aQAvos =new ArrayList<>();
         List<A_QA> aQas = aQa_impService.findByKechengclass_idForTop(kechengclass_id);

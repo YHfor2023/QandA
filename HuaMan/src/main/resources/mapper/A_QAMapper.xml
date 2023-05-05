@@ -46,5 +46,7 @@
         update qatable set qa_teacher_score=#{score}
         where qa_id=#{qa_id}
     </update>
-
+    <select id="findByKechengclass_idAndStudent_id" resultMap="A_QAEntityMap">
+        select * from qatable where kechengclass_id=#{kechengclass_id} and student_id=#{student_id} and is_delete=0
+    </select>
 </mapper>

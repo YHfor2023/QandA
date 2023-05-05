@@ -38,5 +38,8 @@
         update collecttable set is_delete=1
         where collect_id=#{collect_id}
     </update>
+    <select id="findbyQA_id" resultMap="A_CollectEntityMap">
+        select * from collecttable where qa_id=#{qa_id} and is_delete=0
+    </select>
 
 </mapper>

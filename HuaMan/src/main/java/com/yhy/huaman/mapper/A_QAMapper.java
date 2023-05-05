@@ -62,4 +62,12 @@ public interface A_QAMapper {
      */
     Integer givescore(Integer qa_id,Integer score);
 
+    /**
+     * 用课程班级id和studentid来搜索问题
+     * @param kechengclass_id
+     * @param student_id
+     * @return
+     */
+    List<A_QA> findByKechengclass_idAndStudent_id(Integer kechengclass_id,Integer student_id);
+
 }

@@ -35,7 +35,7 @@ public interface A_Student_kechengclassMapper {
      * @return 如果找到则返回对象,反之返回null值
      */
     List<A_Student_kechengclass> findbyKechengclass_id(Integer kechengclass_id);
-
+    List<A_Student_kechengclass> findbyKechengclass_idandStudent_id(Integer kechengclass_id,Integer student_id);
     /**
      * 清除学生入班信息
      * @return

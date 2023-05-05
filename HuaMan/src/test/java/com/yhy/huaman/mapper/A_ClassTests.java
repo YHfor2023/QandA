@@ -37,6 +37,12 @@ public class A_ClassTests {
     private  A_KechengclassService aKechengclassService;
     @Autowired
     private  A_Student_kechengclassService aStudentKechengclassService;
+    @Autowired
+    private A_Student_kechengclassMapper aStudentKechengclassMapper;
+    @Autowired
+    private A_CollectMapper aCollectMapper;
+    @Autowired
+    private A_QA_impMapper aQaImpMapper;
 
     @Autowired
     private A_QAService aQaService;
@@ -183,6 +189,179 @@ public class A_ClassTests {
 //            System.err.println(aStudent.getUser_id());
             aStudentKechengclassService.setA_Student_kechengclassInfo(aStudent.getUser_id(),kechengclass_id);
         }
+    }
+//分数统计板块
+    //教师端统计
+
+    /**
+     * 写在service
+     * 整体导出
+     * 进入班课后 有kechengclass_id
+     * 用kechengclass_id搜索所有学生，得到studentid
+     * 用kechengclass_id  studentid搜索问答表 获取qaid
+     * 问答表中是top问题 加1 被回答加0.1 老师给分加n
+     * 收藏表中 被收藏加0.5
+     * 精选表中 被精选加2
+     */
+    @Test
+    public void fenshu(){
+        Integer kechengclass_id=7;
+        List<A_StudentscoreVO> aStudentscoreVOS =new ArrayList<>();
+
+        List<A_Student_kechengclass> aStudentList = aStudentKechengclassMapper.findbyKechengclass_id(kechengclass_id);
+        for (A_Student_kechengclass a : aStudentList){
+            A_StudentscoreVO aStudentscoreVO =new A_StudentscoreVO();
+            aStudentscoreVO.setStudent_id(a.getStudent_id());
+            aStudentscoreVO.setUser_name(aUserMapper.findStudentByStudent_id(a.getStudent_id()).getUser_name());
+            aStudentscoreVO.setStudent_banji(aUserMapper.findStudentByStudent_id(a.getStudent_id()).getStudent_banji());
+            aStudentscoreVO.setStudent_xuehao(aUserMapper.findStudentByStudent_id(a.getStudent_id()).getStudent_xuehao());
+            aStudentscoreVO.setStudent_zhuanye(aUserMapper.findStudentByStudent_id(a.getStudent_id()).getStudent_zhuanye());
+
+            Integer qa_all = 0;
+            Integer teacher_score_all = 0;
+            Integer answered_score_all = 0;
+            Integer collected_score_all = 0;
+            Integer imped_score_all = 0;
+            System.err.println("\nstudentid:"+a.getStudent_id());
+            List<A_QA> aQas = aQaMapper.findByKechengclass_idAndStudent_id(kechengclass_id,a.getStudent_id());
+
+            List<A_QAscoreVO> aQAscoreVOS =new ArrayList<>();
+            for (A_QA aQa : aQas){
+                A_QAscoreVO aQAscoreVO =new A_QAscoreVO();
+                aQAscoreVO.setQa_id(aQa.getQa_id());
+                aQAscoreVO.setQa_content(aQa.getQa_content());
+                aQAscoreVO.setUser_name(aQa.getUser_name());
+                aQAscoreVO.setKechengclass_name(aQa.getKechengclass_name());
+
+                System.err.print(aQa.getQa_id());
+                qa_all = qa_all + 1;
+
+                System.err.print("  老师给分:"+aQa.getQa_teacher_score());
+                teacher_score_all = teacher_score_all + aQa.getQa_teacher_score();
+                aQAscoreVO.setTeacher_score(aQAscoreVO.getTeacher_score());
+
+                Integer answered_score = 0;
+                List<A_QA> aQas_answers = aQaMapper.findByQA_idForChild(aQa.getQa_id());
+                for (A_QA aQa1 : aQas_answers){
+                    answered_score = answered_score +1;
+                }
+                answered_score_all =answered_score_all +answered_score;
+                System.err.print("  被评论数目:"+answered_score);
+                aQAscoreVO.setAnswered_score(answered_score);
+
+                Integer collected_score = 0;
+                List<A_Collect> aQas_collects = aCollectMapper.findbyQA_id(aQa.getQa_id());
+                for (A_Collect aCollect : aQas_collects){
+                    collected_score = collected_score +1;
+                }
+                collected_score_all = collected_score_all + collected_score;
+                System.err.print("  被收藏数目:"+collected_score);
+                aQAscoreVO.setCollected_score(collected_score);
+
+                Integer imped_score = 0;
+                List<A_QA> aQa_imp = aQaImpMapper.findByQa_id(aQa.getQa_id());
+                for (A_QA aQa1 : aQa_imp){
+                    imped_score = imped_score +1;
+                }
+                imped_score_all = imped_score_all + imped_score;
+                System.err.println("  被精选数目:"+collected_score);
+                aQAscoreVO.setImped_score(imped_score);
+                aQAscoreVOS.add(aQAscoreVO);
+            }
+            aStudentscoreVO.setQa_all(qa_all);
+            aStudentscoreVO.setTeacher_score_all(teacher_score_all);
+            aStudentscoreVO.setAnswered_score_all(answered_score_all);
+            aStudentscoreVO.setCollected_score_all(collected_score_all);
+            aStudentscoreVO.setImped_score_all(imped_score_all);
+            aStudentscoreVO.setaQAscoreVOS(aQAscoreVOS);
+
+            aStudentscoreVOS.add(aStudentscoreVO);
+            System.err.println("总提问数："+qa_all+"  总老师给分："+teacher_score_all+"  总评论数："
+                    +answered_score_all+"  总被收藏数："+collected_score_all+"  总被精选数："+imped_score_all);
+         }
+        System.err.println(aStudentscoreVOS);
+    }
+    @Test
+    public void fenshu2(){
+        Integer student_id=2;
+        List<A_StudentscoreVO> aStudentscoreVOS =new ArrayList<>();
+
+        List<A_Student_kechengclass>  aStudentKechengclasses = aStudentKechengclassMapper.findbyStudent_id(student_id);
+        for (A_Student_kechengclass a : aStudentKechengclasses){
+            A_Student aStudent = aUserMapper.findStudentByStudent_id(student_id);
+
+            A_StudentscoreVO aStudentscoreVO =new A_StudentscoreVO();
+            aStudentscoreVO.setStudent_id(aStudent.getStudent_id());
+            aStudentscoreVO.setUser_name(aStudent.getUser_name());
+            aStudentscoreVO.setStudent_banji(aStudent.getStudent_banji());
+            aStudentscoreVO.setStudent_xuehao(aStudent.getStudent_xuehao());
+            aStudentscoreVO.setStudent_zhuanye(aStudent.getStudent_zhuanye());
+
+            Integer qa_all = 0;
+            Integer teacher_score_all = 0;
+            Integer answered_score_all = 0;
+            Integer collected_score_all = 0;
+            Integer imped_score_all = 0;
+            System.err.print("\nstudentid:"+aStudent.getStudent_id());
+            List<A_QA> aQas = aQaMapper.findByKechengclass_idAndStudent_id(a.getKechengclass_id(),aStudent.getStudent_id());
+            if(aQas.size()>0){
+                System.err.println(aQas.get(0).getKechengclass_name());
+            }
+            List<A_QAscoreVO> aQAscoreVOS =new ArrayList<>();
+            for (A_QA aQa : aQas){
+                A_QAscoreVO aQAscoreVO =new A_QAscoreVO();
+                aQAscoreVO.setQa_id(aQa.getQa_id());
+                aQAscoreVO.setQa_content(aQa.getQa_content());
+                aQAscoreVO.setUser_name(aQa.getUser_name());
+                aQAscoreVO.setKechengclass_name(aQa.getKechengclass_name());
+
+                System.err.print("  "+aQa.getQa_id());
+                qa_all = qa_all + 1;
+
+                System.err.print("  老师给分:"+aQa.getQa_teacher_score());
+                teacher_score_all = teacher_score_all + aQa.getQa_teacher_score();
+                aQAscoreVO.setTeacher_score(aQAscoreVO.getTeacher_score());
+
+                Integer answered_score = 0;
+                List<A_QA> aQas_answers = aQaMapper.findByQA_idForChild(aQa.getQa_id());
+                for (A_QA aQa1 : aQas_answers){
+                    answered_score = answered_score +1;
+                }
+                answered_score_all =answered_score_all +answered_score;
+                System.err.print("  被评论数目:"+answered_score);
+                aQAscoreVO.setAnswered_score(answered_score);
+
+                Integer collected_score = 0;
+                List<A_Collect> aQas_collects = aCollectMapper.findbyQA_id(aQa.getQa_id());
+                for (A_Collect aCollect : aQas_collects){
+                    collected_score = collected_score +1;
+                }
+                collected_score_all = collected_score_all + collected_score;
+                System.err.print("  被收藏数目:"+collected_score);
+                aQAscoreVO.setCollected_score(collected_score);
+
+                Integer imped_score = 0;
+                List<A_QA> aQa_imp = aQaImpMapper.findByQa_id(aQa.getQa_id());
+                for (A_QA aQa1 : aQa_imp){
+                    imped_score = imped_score +1;
+                }
+                imped_score_all = imped_score_all + imped_score;
+                System.err.println("  被精选数目:"+collected_score);
+                aQAscoreVO.setImped_score(imped_score);
+                aQAscoreVOS.add(aQAscoreVO);
+            }
+            aStudentscoreVO.setQa_all(qa_all);
+            aStudentscoreVO.setTeacher_score_all(teacher_score_all);
+            aStudentscoreVO.setAnswered_score_all(answered_score_all);
+            aStudentscoreVO.setCollected_score_all(collected_score_all);
+            aStudentscoreVO.setImped_score_all(imped_score_all);
+            aStudentscoreVO.setaQAscoreVOS(aQAscoreVOS);
+
+            aStudentscoreVOS.add(aStudentscoreVO);
+            System.err.println("总提问数："+qa_all+"  总老师给分："+teacher_score_all+"  总评论数："
+                    +answered_score_all+"  总被收藏数："+collected_score_all+"  总被精选数："+imped_score_all);
+        }
+        System.err.println(aStudentscoreVOS);
     }
 
 
